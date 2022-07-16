@@ -1,4 +1,4 @@
-vpc_network_name = "pr_gcp"
+vpc_network_name = "pr-gcp"
 region = "asia-south1"
 zone = "asia-south1-c"
 subnetwork = "terraform-subnet"
