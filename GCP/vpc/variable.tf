@@ -20,7 +20,7 @@ variable "vpc_network_name" {
 }
 
 variable "subnetwork02" {
-    type = number
+    type = string
     description = "Subnet for vpn PSCEP"
   
 }
