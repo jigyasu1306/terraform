@@ -1,0 +1,6 @@
+region = "asia-south1"
+zone = "asia-south1-c"
+firewall = "pscep-firewall"
+nat_name = "pscep_nat"
+router_name = "router_nat"
+forwarding_rule = "pscep-forwarding-rule"
