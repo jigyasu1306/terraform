@@ -7,7 +7,7 @@ resource "google_compute_subnetwork" "subnetwork01" {
   name = var.subnetwork
   ip_cidr_range = "10.2.0.0/16"
   region = var.region
-  network = google_compute_network.vpc_network01
+  network = google_compute_network.vpc_network01.name
   private_ip_google_access = "false"
 }
 
@@ -21,6 +21,6 @@ resource "google_compute_subnetwork" "subnetwork02" {
   name = var.subnetwork02
   ip_cidr_range = "10.3.0.0/16"
   region = var.region
-  network = google_compute_network.vpc_network02
+  network = google_compute_network.vpc_network02.name
   private_ip_google_access = "true"
 }
