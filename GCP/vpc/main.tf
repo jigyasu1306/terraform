@@ -1,14 +1,3 @@
-//provider "google" {
-  //project = var.project_name
-  //region  = var.region
-  //zone    = var.zone
-//}
-
-resource "google_compute_network" "vpc_network01" {
-  name = var.vpc_network_name
-  auto_create_subnetworks = "false"
-}
-
 resource "google_compute_subnetwork" "private-subnetwork01" {
   name = var.subnetwork
   ip_cidr_range = "10.2.0.0/16"
@@ -17,8 +6,8 @@ resource "google_compute_subnetwork" "private-subnetwork01" {
   private_ip_google_access = "false"
 }
 
-resource "google_compute_network" "vpc_network02" {
-  name = var.vpc_network_name02
+resource "google_compute_network" "vpc_network01" {
+  name = var.vpc_network_name
   auto_create_subnetworks = "false"
 }
 
@@ -28,4 +17,8 @@ resource "google_compute_subnetwork" "private-subnetwork02" {
   region = var.region
   network = var.vpc_network_name02
   private_ip_google_access = "true"
+}
+resource "google_compute_network" "vpc_network02" {
+  name = var.vpc_network_name02
+  auto_create_subnetworks = "false"
 }
