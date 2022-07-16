@@ -10,6 +10,10 @@ resource "google_compute_subnetwork" "private-subnetwork01" {
   private_ip_google_access = "false"
 }
 
+resource "google_compute_network" "vpc_network022" {
+  name = var.vpc_network_name02
+  auto_create_subnetworks = "false"
+}
 
 resource "google_compute_subnetwork" "private-subnetwork02" {
   name = var.subnetwork02
