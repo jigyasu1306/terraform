@@ -1,4 +1,4 @@
-resource "google_compute_network" "vpc_network" {
+resource "google_compute_network" "vpc-network" {
 name = var.vpc_network_name
 auto_create_subnetworks = "false"
 }
