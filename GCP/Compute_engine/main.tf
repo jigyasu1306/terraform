@@ -12,7 +12,7 @@ network = google_compute_network.vpc-network.name
 
 
 resource "google_compute_instance" "vm_instance" {
-  name = "new-terraform instance"
+  name = var.instance
   machine_type = e2-standard-2
   zone = var.zone_name
   boot_disk {

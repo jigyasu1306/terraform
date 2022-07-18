@@ -28,16 +28,6 @@ variable "subnework" {
     type = string
     description = "Name of Subnetwork"
 }
-variable "subnetwork2" {
-    type = string
-    description = "Name of subnet for PSCEP"
-}
-
-variable "ip_cidr_range02" {
-    type = number
-    description = "ip_cidr_range for PSCEP"
-  
-}
 
 variable "ip_cidr_range" {
     type = number
