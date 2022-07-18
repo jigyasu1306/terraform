@@ -6,7 +6,7 @@ resource "google_compute_network" "vpc_network" {
 resource "google_compute_instance" "vm_instance" {
   name = "new-terraform instance"
   machine_type = e2-standard-2
-  zone = var.zone
+  zone = var.zone_name
   boot_disk {
     initialize_params {
       image = "centos-cloud/centos-7"

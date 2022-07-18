@@ -55,7 +55,7 @@ variable "service_account" {
   
 }
 
-variable "zone" {
+variable "zone_name" {
     type = string
     description = "Name of Zone"
   
