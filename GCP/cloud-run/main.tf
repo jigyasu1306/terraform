@@ -31,7 +31,7 @@ resource "google_cloud_run_service" "gcr_service" {
   template {
     spec {
       containers {
-        //image = "asia-docker.pkg.dev/cloudrun/container/hello"
+        image = "asia-docker.pkg.dev/cloudrun/container/hello"
         resources {
           limits = {
             cpu = "1000m"
