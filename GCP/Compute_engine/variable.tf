@@ -29,11 +29,6 @@ variable "subnetwork" {
     description = "Name of Subnetwork"
 }
 
-variable "ip_cidr_range" {
-    type = number
-    description = "CIDR range for subnetwork"
-}
-
 variable "vpc_network_name" {
     type = string
     description = "Giving a name for vpc network"
