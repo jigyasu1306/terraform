@@ -13,7 +13,7 @@ network = google_compute_network.vpc-network.name
 
 resource "google_compute_instance" "vm_instance" {
   name = var.instance
-  machine_type = e2-standard-2
+  machine_type = "e2-medium"
   zone = var.zone_name
   boot_disk {
     initialize_params {
@@ -21,7 +21,7 @@ resource "google_compute_instance" "vm_instance" {
     }
   }
   network_interface {
-    network = google_compute_instance.vpc_network.name
+    network = google_compute_network.vpc-network.name
   }
   
 }

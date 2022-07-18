@@ -24,7 +24,7 @@ variable "instance" {
     description = "Name of Instance"
 }
 
-variable "subnework" {
+variable "subnetwork" {
     type = string
     description = "Name of Subnetwork"
 }
