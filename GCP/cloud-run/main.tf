@@ -31,7 +31,7 @@ resource "google_cloud_run_service" "gcr_service" {
   template {
     spec {
       containers {
-        image = "asia-docker.pkg.dev/cloudrun/container/hello-world"
+        //image = "asia-docker.pkg.dev/cloudrun/container/hello"
         resources {
           limits = {
             cpu = "1000m"
@@ -43,16 +43,16 @@ resource "google_cloud_run_service" "gcr_service" {
       # service_account_name = myservice_runtime_sa
     }
 
-    metadata {
-      annotations = {
+    //metadata {
+      //annotations = {
         # Limit scale up to prevent any cost blow outs!
-        "autoscaling.knative.dev/maxScale" = "5"
-        # Use the VPC Connector
-        "run.googleapis.com/vpc-access-connector" = google_vpc_access_connector.connector.name
-        # all egress from the service should go through the VPC Connector
-        "run.googleapis.com/vpc-access-egress" = "all-traffic"
-      }
-    }
+        //"autoscaling.knative.dev/maxScale" = "5"
+        //# Use the VPC Connector
+        //"run.googleapis.com/vpc-access-connector" = google_vpc_access_connector.connector.name
+        //# all egress from the service should go through the VPC Connector
+        //"run.googleapis.com/vpc-access-egress" = "all-traffic"
+      //}
+    //}
   }
   autogenerate_revision_name = true
 }
