@@ -1,41 +1,72 @@
-resource "google_compute_firewall" "rules" {
-  name = var.firewall
-  network = var.vpc_network_name02
-  source_ranges = var.ip_firewall_rule
-  allow {
-    protocol = "tcp"
-    ports = ["80", "8080", "22"]
-  }
+resource "google_compute_network" "vpc-network" {
+  name = var.network-name
+  auto_create_subnetworks = false
 }
 
-resource "google_compute_address" "static_ip" {
-  name = "static-ip"
-  region = "${var.region}"
-  address = "192.168.255.250"
-  network = var.vpc_network_name02
-}
-
-resource "google_compute_forwarding_rule" "google_compute_forwarding_rule" {
-  name = var.forwarding_rules
+resource "google_compute_service_attachment" "psc_ilb_service_attachment" {
+  name = var.psc_ilb
   region = var.region
-  allow_global_access = true
-  network = var.vpc_network_name02
-  subnetwork = var.subnetwork2
-  target-google-apis-bundle = all-apis
+  domain_names = ["p.googleapis.com."]
+  enable_proxy_protocol = true
+  connection_preference = "ACCEPT_AUTOMATIC"
+  nat_subnets = [google_compute_subnetwork.psc_ilb_nat.id]
+  target_service = google_compute_forwarding_rule.psc_ilb_target_service.id
 }
 
-resource "google_compute_router_nat" "cluster-nat" {
-  name = var.nat_name
-  router = "${google_compute_router.router.name}"
-  region = "${google_compute_router.router.region}"
-  nat_ip_allocate_option= "MANUAL_ONLY"
-  nat_ips = ["${google_compute_address.static_ip.self_link}"]
-  source_subnetwork_ip_ranges_to_nat = "LIST_OF_SUBNETWORKS"
-  subnetwork {
-    name = "${google_compute_subnetwork.service.self_link}"
-    source_ip_ranges_to_nat = ["ALL PRIVATE GOOGLE SERVICES"]
+resource "google_compute_address" "psc_ilb_consumer_address" {
+  name = "psc-ilb-consumer-address"
+  region = var.region
+  subnetwork = var.subnetwork-name
+  address_type = "INTERNAL"
+}
+
+resource "google_compute_forwarding_rule" "psc_ilb_consumer" {
+  name   = var.forwarding_rule
+  region = var.region
+  target = google_compute_service_attachment.psc_ilb_service_attachment.name
+  load_balancing_scheme = "" # need to override EXTERNAL default when target is a service attachment
+  network = "default"
+  ip_address = google_compute_address.psc_ilb_consumer_address.id
+}
+
+resource "google_compute_forwarding_rule" "psc_ilb_target_service" {
+  name   = "producer-forwarding-rule"
+  region = var.region
+
+  load_balancing_scheme = "INTERNAL"
+  backend_service = google_compute_region_backend_service.producer_service_backend.id
+  all_ports = true
+  network = google_compute_network.psc_ilb_network.name
+  subnetwork = google_compute_subnetwork.psc_ilb_producer_subnetwork.name
+}
+
+resource "google_compute_region_backend_service" "producer_service_backend" {
+  name   = "producer-service"
+  region = var.region
+  health_checks = [google_compute_health_check.producer_service_health_check.id]
+}
+resource "google_compute_health_check" "producer_service_health_check" {
+  name = "producer-service-health-check"
+  check_interval_sec = 1
+  timeout_sec        = 1
+  tcp_health_check {
+    port = "80"
   }
 }
-
-
-
+resource "google_compute_network" "psc_ilb_network" {
+  name = "psc-ilb-network"
+  auto_create_subnetworks = false
+}
+resource "google_compute_subnetwork" "psc_ilb_producer_subnetwork" {
+  name   = "psc-ilb-producer-subnetwork"
+  region = var.region
+  network       = google_compute_network.psc_ilb_network.id
+  ip_cidr_range = "10.0.0.0/16"
+}
+resource "google_compute_subnetwork" "psc_ilb_nat" {
+  name   = "psc-ilb-nat"
+  region = var.region
+  network = google_compute_network.psc_ilb_network.id
+  purpose =  "PRIVATE_SERVICE_CONNECT"
+  ip_cidr_range = "10.1.0.0/16"
+}

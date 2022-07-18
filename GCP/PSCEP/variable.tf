@@ -26,5 +26,20 @@ variable "router_name" {
 variable "forwarding_rule" {
     type = "string"
     description = "Name of firewall_rule"
+}
+
+variable "psc_ilb" {
+    type = string
+    description = "Name of pscilb"
+}
+
+variable "subnetwork-name" {
+    type = string
+    description = "Name of subnetwork"
+}
+
+variable "network-name" {
+    type = string
+    description = "Name of Network"
   
 }
