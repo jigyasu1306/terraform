@@ -1,12 +1,7 @@
-resource "google_compute_network" "vpc-network" {
-  name = var.network-name
-  auto_create_subnetworks = false
-}
-
 resource "google_compute_service_attachment" "psc_ilb_service_attachment" {
   name = var.psc_ilb
   region = var.region
-  domain_names = ["gcp.tfacc.hashicorptest.com."]
+  //domain_names = ["gcp.tfacc.hashicorptest.com."]
   enable_proxy_protocol = true
   connection_preference = "ACCEPT_AUTOMATIC"
   nat_subnets = [google_compute_subnetwork.psc_ilb_nat.id]
@@ -32,7 +27,6 @@ resource "google_compute_forwarding_rule" "psc_ilb_consumer" {
 resource "google_compute_forwarding_rule" "psc_ilb_target_service" {
   name   = "producer-forwarding-rule"
   region = var.region
-
   load_balancing_scheme = "INTERNAL"
   backend_service = google_compute_region_backend_service.producer_service_backend.id
   all_ports = true
@@ -58,9 +52,9 @@ resource "google_compute_network" "psc_ilb_network" {
   auto_create_subnetworks = false
 }
 resource "google_compute_subnetwork" "psc_ilb_producer_subnetwork" {
-  name   = "psc-ilb-producer-subnetwork"
+  name = "psc-ilb-producer-subnetwork"
   region = var.region
-  network       = google_compute_network.psc_ilb_network.id
+  network = google_compute_network.psc_ilb_network.id
   ip_cidr_range = "10.0.0.0/16"
 }
 resource "google_compute_subnetwork" "psc_ilb_nat" {
